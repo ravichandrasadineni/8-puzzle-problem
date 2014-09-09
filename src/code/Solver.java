@@ -7,7 +7,7 @@ import java.util.Stack;
 public class Solver {
 	// find a solution to the initial board
 	ArrayList<Board> boardsVisited = new ArrayList<Board>();
-	Board goalBoard;
+	ArrayList<Board> goalBoard;
 	Board finalBoard;
 	BoardProirityQueue boardProirityQueue;
 	ArrayList<Board> solutionPath;
@@ -24,7 +24,7 @@ public class Solver {
 		while(boardIterator.hasNext()) {
 			Board currentBoard = boardIterator.next();
 			boardIterator.remove();
-			if(goalBoard.equals(currentBoard))
+			if(isFinalBoard(currentBoard))
 			{
 				finalBoard= currentBoard;
 				populateFinalSolution();
@@ -59,7 +59,7 @@ public class Solver {
 		}
 		return false;
 	}
-	
+
 	private void addToAlreadyVisitedNodes(Board currentBoard) {
 		boardsVisited.add(currentBoard);
 	}
@@ -71,9 +71,12 @@ public class Solver {
 
 	private void populateGoalBoard () 
 	{
-		int[][]tiles = {{1,2,3} ,{4,5,6}, {7,8,0}};
+		int[][]finalBoard1Tiles = {{1,2,3} ,{4,5,6}, {7,8,0}};
+		int[][]finalBoard2Tiles = {{1,2,3}, {8,0,4}, {7,6,5}};
+		goalBoard = new ArrayList<Board>();
+		goalBoard.add(new Board(finalBoard1Tiles));
+		goalBoard.add(new Board(finalBoard2Tiles));
 
-		goalBoard = new Board(tiles);
 	}
 
 	private void populateFinalSolution() {
@@ -87,5 +90,15 @@ public class Solver {
 		while(!finalSolutionStack.isEmpty()) {
 			solutionPath.add(finalSolutionStack.pop());
 		}
+	}
+
+
+	public boolean isFinalBoard(Board b) {
+		for(Board solBoard : goalBoard) {
+			if (solBoard.equals(b)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
